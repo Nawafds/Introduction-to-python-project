@@ -160,20 +160,41 @@ def user_stats(df):
     user_type_counts = df['User Type'].value_counts()
     print("The counts of different user types:", user_type_counts)
 
-    # Display counts of gender
-    user_gender_counts = df['Gender'].value_counts()
-    print("The counts of different genders:", user_gender_counts)
-
+     # Display counts of gender
+    try:
+        user_gender_counts = df['Gender'].value_counts()
+        print("The counts of different genders:", user_gender_counts)
+    except KeyError:
+        print('Gender stats cannot be calculated because Gender does not appear in the dataframe')
+    
     # Display earliest, most recent, and most common year of birth
-    earliest_year_of_birth = df['Birth Year'].min()
-    recent_year_of_birth = df['Birth Year'].max()
-    common_year_of_birth = df['Birth Year'].mode()[0]
+    try:
+        earliest_year_of_birth = df['Birth Year'].min()
+        recent_year_of_birth = df['Birth Year'].max()
+        common_year_of_birth = df['Birth Year'].mode()[0]
+        print("The earliest, most recent, and most common year of birth:", earliest_year_of_birth, recent_year_of_birth, common_year_of_birth)
+    except KeyError:
+        print('Birth Year stats cannot be calculated because Birth Year does not appear in the dataframe')
+    
 
-    print("The earliest, most recent, and most common year of birth:", earliest_year_of_birth, recent_year_of_birth, common_year_of_birth)
+   
+    
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
+def display_data(df):
+    start_index = 0
+
+    while True:
+        response = input("Would you like to view individal trip data? (yes or no): ").strip().lower()
+        if response == "no":
+            break
+        elif response == "yes":
+            print(df.iloc[start_index:start_index+5])
+            start_index+=5
+        else:
+            print('Invalid input. Please enter a "yes" or a "no".')
 
 def main():
     while True:
@@ -184,7 +205,7 @@ def main():
         station_stats(df)
         trip_duration_stats(df)
         user_stats(df)
-
+        display_data(df)
         restart = input('\nWould you like to restart? Enter yes or no.\n')
         if restart.lower() != 'yes':
             break
